@@ -11,7 +11,7 @@ const userSchema = new Schema(
       index: true,
     },
 
-    fullname: {
+    fullName: {
       type: string,
       required: true,
       index: true,
@@ -34,7 +34,7 @@ const userSchema = new Schema(
       trime: true,
       lowercase: true,
     },
-    profile: {
+    avatar: {
       type: string,
       required: true, //will add a default dp
     },
