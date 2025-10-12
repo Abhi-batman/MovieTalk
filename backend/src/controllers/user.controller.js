@@ -59,10 +59,10 @@ const loginUser = asyncHandler(async (req, res) => {
     $or: [{ username }, { email }],
   });
 
-  if (!user) throw new ApiError(404, "User not found");
+  const passwordCorrect = user.passwordCheck(password);
+  if (!passwordCorrect) throw new ApiError(401, "Unauthorized Access");
 
-  if (!(password == user.password))
-    throw new ApiError(401, "Unauthorized access");
+  if (!user) throw new ApiError(404, "User not found");
 
   const { accessToken, refreshToken } = await generateAccessRefreshToken(
     user._id
