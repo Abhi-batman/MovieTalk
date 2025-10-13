@@ -12,7 +12,7 @@ const userSchema = new Schema(
     },
 
     fullName: {
-      type: string,
+      type: String,
       required: true,
       index: true,
       trim: true,
@@ -35,11 +35,11 @@ const userSchema = new Schema(
       lowercase: true,
     },
     avatar: {
-      type: string,
+      type: String,
       required: true, //will add a default dp
     },
     RefreshToken: {
-      type: string,
+      type: String,
       required: true,
     },
   },

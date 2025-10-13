@@ -1,11 +1,7 @@
 import { asyncHandler } from "../utils/async_handler.js";
 import { ApiError } from "../utils/api_error.js";
-import { ApiError } from "../utils/api_error.js";
-import {
-  cloudinary,
-  uploadCloudinary,
-  deleteCloudinary,
-} from "../utils/cloudinary.js";
+import { ApiResponse } from "../utils/api_response.js";
+import { uploadCloudinary } from "../utils/cloudinary.js";
 import { User } from "../models/user.model.js";
 import mongoose from "mongoose";
 
@@ -36,7 +32,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   const user = await User.create({
     username,
-    avatar: uploadProfile?.url,
+    avatar: { url: uploadProfile?.url, publicId: uploadProfile?.publicId },
     email,
     fullName: fullname,
     password,
@@ -170,13 +166,24 @@ const updateAvatar = asyncHandler(async (req, res) => {
 
   if (!newAvatarPath) throw new ApiError(401, "File Path couldnt be found");
 
-  const deletedImage = await deleteCloudinary(req.user._id);
-  if (!deletedImage) throw new ApiError(500, "Avatar couldnt be deleted");
+  const user = await User.findById(req.user._id);
+
+  if (req.user._id.toString() !== user._id.toString()) {
+    throw new ApiError(401, "unauthorized update request");
+  }
+
+  if (user.avatar?.public_id) {
+    try {
+      await cloudinary.uploader.destroy(user.avatar.public_id);
+    } catch (error) {
+      throw new ApiError(400, "Error deleting old image");
+    }
+  }
 
   const uploadAvatar = await uploadCloudinary(newAvatarPath);
   if (!uploadAvatar) throw new ApiError(500, "Avatar couldnt be uploaded");
 
-  const user = await User.findByIdAndUpdate(
+  const updatedUser = await User.findByIdAndUpdate(
     req.user._id,
     {
       $set: { avatar: uploadAvatar.url },
@@ -188,3 +195,48 @@ const updateAvatar = asyncHandler(async (req, res) => {
     .status(201)
     .json(new ApiResponse(200, user, "Successfully updated profile picture"));
 });
+
+const getPosts = asyncHandler(async (req, res) => {
+  const { username } = req.params;
+  if (!username?.trim()) throw new ApiError(404, "No username entered");
+
+  const posts = await User.aggregate([
+    {
+      $match: { username: username.trim() },
+    },
+    {
+      $lookup: {
+        from: "posts",
+        localField: "_id",
+        foreignField: "postedBy",
+        as: "posts",
+      },
+    },
+    {
+      $addFields: {
+        postCount: {
+          $size: "$posts",
+        },
+      },
+    },
+    {
+      $project: {
+        username: 1,
+        fullName: 1,
+        posts: 1,
+        postCount: 1,
+      },
+    },
+  ]);
+});
+
+export {
+  registerUser,
+  loginUser,
+  loggedOut,
+  getPosts,
+  getProfile,
+  updateAvatar,
+  updatePassword,
+  updateProfile,
+};
