@@ -4,6 +4,8 @@ import { ApiResponse } from "../utils/api_response.js";
 import { uploadCloudinary } from "../utils/cloudinary.js";
 import { User } from "../models/user.model.js";
 import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
+import cookieParser from "cookie-parser";
 
 const generateAccessRefreshToken = asyncHandler(async (userid) => {
   const user = await User.findById(userid);
@@ -18,17 +20,20 @@ const generateAccessRefreshToken = asyncHandler(async (userid) => {
 const registerUser = asyncHandler(async (req, res) => {
   const { username, email, password, fullname } = req.body;
   if (
-    [username, email, password, fullname].some((field) => field?.trim == "")
+    [username, email, password, fullname].some((field) => field?.trim() == "")
   ) {
     throw new ApiError(401, "All fields are needed");
   }
 
   const profileLocalPath = req.file?.path;
-  if (!profileLocalPath) throw new ApiError(401, "File path couldnt be found");
+  if (!profileLocalPath) {
+    throw new ApiError(401, "File path couldnt be found");
+  }
 
   const uploadProfile = await uploadCloudinary(profileLocalPath);
-  if (!uploadProfile)
+  if (!uploadProfile) {
     throw new ApiError(500, "Profile couldnt be uplaoded to cloudinary");
+  }
 
   const user = await User.create({
     username,
@@ -38,7 +43,9 @@ const registerUser = asyncHandler(async (req, res) => {
     password,
   });
 
-  if (!user) throw new ApiError(500, "User couldnt be created");
+  if (!user) {
+    throw new ApiError(500, "User couldnt be created");
+  }
 
   return res
     .status(201)

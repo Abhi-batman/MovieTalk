@@ -1,4 +1,4 @@
-import Router from "express";
+import { Router } from "express";
 import { upload } from "../middlewares/multer.middleware.js";
 import {
   getPosts,
@@ -13,9 +13,7 @@ import {
 import { verifyJwt } from "../middlewares/authentication.middleware.js";
 
 const router = Router();
-
 router.route("/register").post(upload.single("avatar"), registerUser);
-
 router.route("/login").post(loginUser);
 router.route("/logout").post(verifyJwt, loggedOut);
 router.route("/updateProfile").patch(verifyJwt, updateProfile);

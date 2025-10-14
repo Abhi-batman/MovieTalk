@@ -64,7 +64,7 @@ userSchema.methods.generateAccessToken = async () => {
       email: this.email,
     },
     process.env.ATS,
-    { expiresIn: ATE }
+    { expiresIn: process.env.ATE }
   );
 };
 
@@ -74,7 +74,7 @@ userSchema.methods.generateRefreshToken = async () => {
       _id: this._id,
     },
     process.env.RTS,
-    { expiresIn: RTE }
+    { expiresIn: process.env.RTE }
   );
 };
 
