@@ -19,7 +19,7 @@ const verifyJwt = asyncHandler(async (req, _, next) => {
     );
 
     if (!user) {
-      throw ApiError(404, "No such users found");
+      throw new ApiError(404, "No such users found");
     }
 
     req.user = user;

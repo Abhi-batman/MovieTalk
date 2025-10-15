@@ -7,22 +7,34 @@ import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 
-const generateAccessRefreshToken = asyncHandler(async (userid) => {
-  const user = await User.findById(userid);
-  const accessToken = user.generateAccessToken();
-  const refreshToken = user.generateRefreshToken();
+const generateAccessRefreshToken = async (userid) => {
+  try {
+    const user = await User.findById(userid);
+    const accessToken = user.generateAccessToken();
+    const refreshToken = user.generateRefreshToken();
 
-  user.RefreshToken = refreshToken;
-  await user.save({ validateBeforeSave: false });
-  return { accessToken, refreshToken };
-});
+    user.RefreshToken = refreshToken;
+    await user.save({ validateBeforeSave: false });
+    return { accessToken, refreshToken };
+  } catch (error) {
+    throw new ApiError(500, "Something went wrong while generating tokens");
+  }
+};
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { username, email, password, fullname } = req.body;
+  const { username, email, password, fullName } = req.body;
   if (
-    [username, email, password, fullname].some((field) => field?.trim() == "")
+    [username, email, password, fullName].some((field) => field?.trim() == "")
   ) {
     throw new ApiError(401, "All fields are needed");
+  }
+
+  const existUser = await User.findOne({
+    $or: [{ username }, { email }],
+  });
+
+  if (existUser) {
+    throw new ApiError(401, "User Already exists");
   }
 
   const profileLocalPath = req.file?.path;
@@ -39,7 +51,7 @@ const registerUser = asyncHandler(async (req, res) => {
     username,
     avatar: { url: uploadProfile?.url, publicId: uploadProfile?.publicId },
     email,
-    fullName: fullname,
+    fullName: fullName,
     password,
   });
 
@@ -47,9 +59,13 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(500, "User couldnt be created");
   }
 
+  const createdUser = await User.findById(user._id).select(
+    "-password -RefreshToken"
+  );
+
   return res
     .status(201)
-    .json(new ApiResponse(200, user, "User registered Successfully"));
+    .json(new ApiResponse(200, createdUser, "User registered Successfully"));
 });
 
 const loginUser = asyncHandler(async (req, res) => {

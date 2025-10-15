@@ -35,28 +35,27 @@ const userSchema = new Schema(
       lowercase: true,
     },
     avatar: {
-      type: String,
+      type: Object,
       required: true, //will add a default dp
     },
     RefreshToken: {
       type: String,
-      required: true,
     },
   },
   { timestamps: true }
 );
 
-userSchema.pre("save", async (next) => {
-  if (!this.isModified(password)) return next();
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
   this.password = await bcrypt.hash(this.password, 14);
   next();
 });
 
-userSchema.methods.passwordCheck = async (password) => {
+userSchema.methods.passwordCheck = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-userSchema.methods.generateAccessToken = async () => {
+userSchema.methods.generateAccessToken = async function () {
   return jwt.sign(
     {
       _id: this._id,
@@ -68,7 +67,7 @@ userSchema.methods.generateAccessToken = async () => {
   );
 };
 
-userSchema.methods.generateRefreshToken = async () => {
+userSchema.methods.generateRefreshToken = async function () {
   return jwt.sign(
     {
       _id: this._id,
