@@ -92,7 +92,7 @@ const loginUser = asyncHandler(async (req, res) => {
   );
   const options = {
     httpOnly: true,
-    secure: true,
+    secure: false,
   };
   return res
     .status(201)
@@ -122,7 +122,7 @@ const loggedOut = asyncHandler(async (req, res) => {
 
   const options = {
     httpOnly: true,
-    secure: true,
+    secure: false,
   };
 
   return res
@@ -137,7 +137,7 @@ const updatePassword = asyncHandler(async (req, res) => {
 
   const user = await User.findById(req.user._id);
 
-  const check = user.passwordCheck(oldPassword);
+  const check = await user.passwordCheck(oldPassword);
   if (!check) throw new ApiError(401, "Old password incorrect");
 
   user.password = newPassword;
@@ -164,6 +164,17 @@ const updateProfile = asyncHandler(async (req, res) => {
 
   if (!email && !fullName)
     throw new ApiError(401, "One field is required atleast");
+
+  // const createdUserEmail = await User.findOne({ email: email });
+
+  const existingUser = await User.findOne({
+    email: email,
+    _id: { $ne: req.user?._id },
+  });
+
+  if (existingUser) {
+    throw new ApiError(401, "user already exists with the existing email");
+  }
 
   const fieldsAvailable = {};
   if (email) fieldsAvailable.email = email;

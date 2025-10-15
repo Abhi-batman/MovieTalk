@@ -18,7 +18,9 @@ router.route("/login").post(upload.none(), loginUser);
 router.route("/logout").post(verifyJwt, loggedOut);
 router.route("/updateProfile").patch(verifyJwt, updateProfile);
 router.route("/updatePassword").patch(verifyJwt, updatePassword);
-router.route("/updateAvatar").patch(verifyJwt, updateAvatar);
+router
+  .route("/updateAvatar")
+  .patch(verifyJwt, upload.single("avatar"), updateAvatar);
 router.route("/getPosts").get(verifyJwt, getPosts);
 router.route("/getProfile").get(verifyJwt, getProfile);
 
