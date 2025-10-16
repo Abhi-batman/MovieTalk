@@ -10,14 +10,14 @@ import { error } from "console";
 const createPost = asyncHandler(async (req, res) => {
   const { title, description, rating } = req.body;
 
-  if ([title, description, rating].some((fields) => fields.trim() == "")) {
+  if ([title, description, rating].some((fields) => fields?.trim() == "")) {
     throw new ApiError(401, "All fields are required");
   }
 
   const postImage = req.file?.path;
-
+  let uploadImage;
   if (postImage) {
-    const uploadImage = await uploadCloudinary(postImage);
+    uploadImage = await uploadCloudinary(postImage);
     if (!uploadImage) {
       throw new ApiError(500, "Image couldnt be uploaded");
     }
@@ -81,7 +81,7 @@ const deletePost = asyncHandler(async (req, res) => {
 });
 
 const getPostbyId = asyncHandler(async (req, res) => {
-  const post = await Post.findById(req.params._id);
+  const post = await Post.findById(req.params.id);
 
   if (!post) {
     throw new ApiError(404, "Post not found");

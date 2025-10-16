@@ -231,8 +231,12 @@ const updateAvatar = asyncHandler(async (req, res) => {
 });
 
 const getPosts = asyncHandler(async (req, res) => {
-  const { username } = req.params;
-  if (!username?.trim()) throw new ApiError(404, "No username entered");
+  const { username } = req.query;
+  console.log(username);
+
+  if (!username?.trim()) {
+    throw new ApiError(404, "No username entered");
+  }
 
   const posts = await User.aggregate([
     {
@@ -262,6 +266,9 @@ const getPosts = asyncHandler(async (req, res) => {
       },
     },
   ]);
+  return res
+    .status(200)
+    .json(new ApiResponse(200, posts, "Posts fetched successfully"));
 });
 
 export {
