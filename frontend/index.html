@@ -25,6 +25,8 @@
             }
         }
     </script>
+     
+
 
     <!-- Your custom CSS -->
     <link rel="stylesheet" href="./src/styles.css">
@@ -34,7 +36,7 @@
 
 
        <!-- Navbar -->
-         <nav id="navbar" class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md shadow-md transition-all duration-300">
+         <nav id="guestnavbar" class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md shadow-md transition-all duration-300">
             <div class="max-w-7xl mx-auto flex justify-between items-center px-4 py-2">
                 <a href="#" class="flex items-center space-x-2">
                     <img src="https://assets.aceternity.com/logo-dark.png" alt="logo" class="w-8 h-8">
@@ -56,29 +58,37 @@
                     Signup</button></a>
             </div>
         </nav>  
-     <!-- Logged-in Navbar
-        <nav id="navbar" class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md shadow-md transition-all duration-300">
+
+          <script>
+                    // const defaultbutton = document.getElementById('defaultMobileMenuButton');
+                    // const defaultmenu = document.getElementById('defaultMobileMenu');
+                    // defaultbutton.addEventListener('click', () => {
+                    //     defaultmenu.classList.toggle('hidden');
+                    // });
+        </script>
+    <!-- Logged-in Navbar -->
+        <nav id="usernavbar" class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md shadow-md transition-all duration-300">
             <div class="max-w-7xl mx-auto flex justify-between items-center px-4 py-2">
                 <!-- Logo -->
-                <!-- <a href="#" class="flex items-center space-x-2">
+                <a href="#" class="flex items-center space-x-2">
                     <img src="https://assets.aceternity.com/logo-dark.png" alt="logo" class="w-8 h-8">
                     <span class="font-bold text-black">MovieTalk</span>
                 </a>
-         -->
+        
                 <!-- Desktop Menu -->
-                <!-- <div class="hidden lg:flex items-center space-x-4">
+                <div class="hidden lg:flex items-center space-x-4">
                     <a href="/" class="px-3 py-2 rounded hover:bg-gray-200">Home</a>
-                    <a href="/reviews" class="px-3 py-2 rounded hover:bg-gray-200">My Reviews</a> -->
+                    <a href="/reviews" class="px-3 py-2 rounded hover:bg-gray-200">My Reviews</a>
         
                     <!-- Profile Avatar -->
-                    <!-- <div class="relative">
+                   <div class="relative">
                         <button id="profileButton"
                             class="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-300 focus:outline-none">
-                            <img src="https://i.pravatar.cc/100?img=12" alt="Profile" class="w-full h-full object-cover">
+                            <img id="avatar" src="https://i.pravatar.cc/100?img=12" alt="Profile" class="w-full h-full object-cover">
                         </button>
          
                         <!-- Dropdown Menu -->
-                        <!-- <div id="profileDropdown"
+                        <div id="profileDropdown"
                             class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
                             <a href="/profile" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
                             <a href="/settings" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Settings</a>
@@ -87,12 +97,12 @@
                         </div>
                     </div>
                 </div>
-          --> 
+          
                 <!-- Mobile Menu Button -->
-                <!-- <button id="mobileMenuButton" class="lg:hidden px-3 py-2 rounded bg-gray-200">☰</button>
+                 <button id="mobileMenuButton" class="lg:hidden px-3 py-2 rounded bg-gray-200">☰</button>
             </div>
         
-            Mobile Menu
+            <!-- Mobile Menu -->
           <div id="mobileMenu" class="hidden flex-col px-4 py-2 space-y-2 bg-white shadow-md lg:hidden">
                 <a href="/" class="px-3 py-2 rounded hover:bg-gray-200">Home</a>
                 <a href="/reviews" class="px-3 py-2 rounded hover:bg-gray-200">My Reviews</a>
@@ -103,31 +113,95 @@
                 <a href="/settings" class="px-3 py-2 rounded hover:bg-gray-200">Settings</a>
                 <a href="/logout" class="px-3 py-2 rounded hover:bg-gray-200">Logout</a>
             </div>
-        </nav> --> 
-        
-       <script>
+        </nav>  
+
+
+
+         <script>
             // Mobile menu toggle
-            // const button = document.getElementById('mobileMenuButton');
-            // const menu = document.getElementById('mobileMenu');
+            // const button = document.getElementById('loggedInMobileMenuButton');
+            // const menu = document.getElementById('loggedInMobileMenu');
             // button.addEventListener('click', () => {
-            //     menu.classList.toggle('hidden'); -->
-            //  });
+            //     menu.classList.toggle('hidden'); 
+            //   });
 
-        //     // Profile dropdown toggle
-        //     const profileButton = document.getElementById('profileButton');
-        //     const profileDropdown = document.getElementById('profileDropdown');
-        //     profileButton.addEventListener('click', () => {
-        //         profileDropdown.classList.toggle('hidden');
-        //     });
+            // Profile dropdown toggle
+            const profileButton = document.getElementById('profileButton');
+            const profileDropdown = document.getElementById('profileDropdown');
+            profileButton.addEventListener('click', () => {
+                profileDropdown.classList.toggle('hidden');
+            });
 
-        //     // Close dropdown if clicked outside
-        //     document.addEventListener('click', (e) => {
-        //         if (!profileButton.contains(e.target) && !profileDropdown.contains(e.target)) {
-        //             profileDropdown.classList.add('hidden');
-        //         }
-        //     });
+            // Close dropdown if clicked outside
+            document.addEventListener('click', (e) => {
+                if (!profileButton.contains(e.target) && !profileDropdown.contains(e.target)) {
+                    profileDropdown.classList.add('hidden');
+                }
+            });
+         </script> 
+         
+         <script>
+        // navbar
+          
+
+        document.addEventListener('DOMContentLoaded',async ()=>{
+
+          
+
+          const guestNavbar=document.getElementById('guestnavbar')
+           const userNavbar=document.getElementById('usernavbar')
+           const avatar=document.getElementById('avatar')
+
+           try {
+            const response=await fetch('http://localhost:5000/api/v1/users/getProfile',{
+              method:'GET',
+              credentials: "include"
+            })
+
+            const data=await response.json()
+
+            if(response.ok){
+              guestNavbar.classList.add('hidden')
+              userNavbar.classList.remove('hidden')
+
+              if(data?.data?.avatar?.url){
+                avatar.src=data?.data?.avatar?.url;
+              }
+              
+
+
+            }else{
+               userNavbar.classList.add('hidden');
+        guestNavbar.classList.remove('hidden');
+            }
+
+           } catch (error) {
+             console.error('Error fetching profile:', error);
+      userNavbar.classList.add('hidden');
+      guestNavbar.classList.remove('hidden');
+            
+           }
+
+        })
+         
+                
+           
+           </script> 
+
+
+
+
+      
+
+
+
+
+
+
+
       </script>
-
+          
+     
     
 
 
@@ -235,15 +309,13 @@
 
 
      
-       
+       <script>
+
+
+
+       </script>
     
-        <script>
-            const button = document.getElementById('mobileMenuButton');
-            const menu = document.getElementById('mobileMenu');
-            button.addEventListener('click', () => {
-                menu.classList.toggle('hidden');
-            });
-        </script>
+      
 
     <script src="./src/script.js"></script>
 </body>
