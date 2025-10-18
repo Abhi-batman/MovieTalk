@@ -170,6 +170,13 @@
               
 
 
+
+              
+
+              
+
+
+
             }else{
                userNavbar.classList.add('hidden');
         guestNavbar.classList.remove('hidden');
@@ -182,9 +189,125 @@
             
            }
 
-        })
+
+const sentinel=document.getElementById('sentinel')
+const container=document.getElementById('cardsContainer')
+let page = 1;
+  let isLoading = false;
+
+  async function loadMovies() {
+    if (isLoading) return;
+    isLoading = true;
+
+
+
+    
          
-                
+//cards
+
+
+try {
+  const responseCard=await fetch(`http://localhost:5000/api/v1/post/getAllPosts?page=${page}`,{
+    method:'GET'
+
+  })
+
+  const data=await responseCard.json()
+  console.log("Fetched data:", data);
+
+
+  if(responseCard.ok){
+   data.data.posts.forEach(element => {
+      const card=document.createElement('div')
+      card.className = 'max-w-md w-full bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200 mx-auto my-6';
+
+      card.innerHTML=`<div class="flex items-center justify-between p-4">
+    <div class="flex items-center space-x-3">
+      <img
+        src="${element.user.avatar}"
+        alt="Profile"
+        class="w-10 h-10 rounded-full object-cover"
+      />
+      <div>
+        <h3 class="text-sm font-semibold text-gray-800">${element.user.fullName}</h3>
+        <p class="text-xs text-gray-500">@${element.user.username}</p>
+      </div>
+    </div>
+    <p class="text-xs text-gray-500">2h ago</p>
+  </div>
+
+  <!-- Post Image -->
+  <div>
+    <img
+      src="${element.image}"
+      alt="Post"
+      class="w-full h-64 object-cover"
+    />
+  </div>
+
+  <!-- Post Content -->
+  <div class="p-4">
+    <h2 class="text-lg font-bold text-gray-800 mb-2">${element.title}</h2>
+
+    <!-- Rating -->
+    <div class="flex items-center mb-3">
+      <!-- 4 out of 5 stars example -->
+      <div class="flex text-yellow-400 text-lg">
+        ★★★★☆
+      </div>
+      <span class="text-sm text-gray-600 ml-2">4.0 / 5</span>
+    </div>
+
+    <p class="text-sm text-gray-600">
+     ${element.description}
+    </p>
+  </div>
+
+      `
+
+    container.appendChild(card)
+    });
+
+    page++
+
+
+
+  }else{
+    observer.unobserve(sentinel);
+  }
+} catch (error) {
+  console.log("Error fetching posts ",error);
+  //
+}finally {
+      isLoading = false;
+    }
+
+
+
+
+
+
+
+
+
+  }
+  const observer = new IntersectionObserver((entries) => {
+    const lastEntry = entries[0];
+    if (lastEntry.isIntersecting) {
+      loadMovies();
+    }
+  });
+   observer.observe(sentinel);
+
+   loadMovies();
+
+
+
+
+
+})
+         
+
            
            </script> 
 
@@ -199,7 +322,7 @@
 
 
 
-      </script>
+     
           
      
     
@@ -211,8 +334,10 @@
         <p class="mt-4 text-center text-gray-700">
             Join our community of movie lovers.Share your thoughts,discover new favourites, and connect with fellow cinephiles.
         </p>
-    </main>
-
+      </main>
+  
+<div id="cardsContainer">
+<!-- 2nd -->
    <div class="max-w-md w-full bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200 mx-auto my-6">
   <!-- Header -->
   <div class="flex items-center justify-between p-4">
@@ -257,51 +382,13 @@
     </p>
   </div>
 </div>
-   <div class="max-w-md w-full bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200 mx-auto my-6">
-  <!-- Header -->
-  <div class="flex items-center justify-between p-4">
-    <div class="flex items-center space-x-3">
-      <img
-        src="https://i.pravatar.cc/100?img=8"
-        alt="Profile"
-        class="w-10 h-10 rounded-full object-cover"
-      />
-      <div>
-        <h3 class="text-sm font-semibold text-gray-800">Aarav Patel</h3>
-        <p class="text-xs text-gray-500">@aaravp</p>
-      </div>
-    </div>
-    <p class="text-xs text-gray-500">2h ago</p>
-  </div>
 
-  <!-- Post Image -->
-  <div>
-    <img
-      src="https://images.unsplash.com/photo-1606112219348-204d7d8b94ee"
-      alt="Post"
-      class="w-full h-64 object-cover"
-    />
-  </div>
 
-  <!-- Post Content -->
-  <div class="p-4">
-    <h2 class="text-lg font-bold text-gray-800 mb-2">Inception (2010)</h2>
+<div id="loader" class="text-center text-gray-600 my-4 hidden">Loading more movies...</div>
 
-    <!-- Rating -->
-    <div class="flex items-center mb-3">
-      <!-- 4 out of 5 stars example -->
-      <div class="flex text-yellow-400 text-lg">
-        ★★★★☆
-      </div>
-      <span class="text-sm text-gray-600 ml-2">4.0 / 5</span>
-    </div>
 
-    <p class="text-sm text-gray-600">
-      A thrilling sci-fi movie that explores dreams within dreams. Must watch!
-    </p>
-  </div>
+<div id="sentinel" class="h-10"></div>
 </div>
-
 
 
 </div>    
@@ -311,7 +398,7 @@
      
        <script>
 
-
+        
 
        </script>
     
