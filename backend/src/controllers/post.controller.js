@@ -114,13 +114,16 @@ const getAllPosts = asyncHandler(async (req, res) => {
         title: 1,
         description: 1,
         createdAt: 1,
+        image:1,
         "user.username": 1,
         "user.avatar": 1,
+        "user.fullName":1
       },
-    },
+      },
     {
       $sort: { createdAt: -1 },
     },
+    
     { $skip: skip },
     { $limit: limit },
   ]);
