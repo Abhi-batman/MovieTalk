@@ -208,51 +208,153 @@
       
       
       
-      <script>
-        //getProfile
+ 
+    
         
-        const username=document.getElementById('Tusername')
-        const email=document.getElementById('Temail')
-        const fullName=document.getElementById('TfullName')
-        const avatar=document.getElementById('avatar')
+     <script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const avatar = document.getElementById("avatar");
+  const Tusername = document.getElementById("Tusername");
+  const TfullName = document.getElementById("TfullName");
+  const Temail = document.getElementById("Temail");
+  const reviews = document.getElementById("reviews");
 
-      const reviewCount=document.getElementById('reviews')
+  const fieldUsername = document.getElementById("username");
+  const fieldFullName = document.getElementById("fullName");
+  const fieldEmail = document.getElementById("email");
 
-      const fieldUsername=document.getElementById('username')
-      const fieldEmail=document.getElementById('email')
-      const fieldfullName=document.getElementById('fullName')
-
-      try {
-        const response=await fetch('https://symmetrical-space-yodel-557vrj6v9r7fv49x-5000.app.github.dev/api/v1/users/getProfile',{
-          method:'GET',
-          credentials:'include'
-        })
-
-        const data=await response.json()
-
-        if(response.ok && data.data.length>0){
-
-          username.innerText=data.data.username
-           email.innerText=data.data.email
- fullName.innerText=data.data.fullName
- avatar.src=data.data.avatar
-
- fieldUsername.value=data.data.username;
- fieldEmail.value=data.data.email
- fieldfullName.value=data.data.fullName
-        }else{
-          alert('There were error fetching your profile')
-        }
-        
+ 
+  try {
+    const res = await fetch("https://symmetrical-space-yodel-557vrj6v9r7fv49x-5000.app.github.dev/api/v1/users/getProfile", {
+      method: "GET",
+      credentials: "include"
+    });
+    const data = await res.json();
+    console.log(data)
 
 
-      } catch (error) {
-        console.log('Error fetching profile data ', error)
-      }
-        
-        //update Profile
-        
-      </script>
+    if (res.ok && data.data) {
+      const user = data.data;
+      Tusername.innerText = "@" + user.username;
+      TfullName.innerText = user.fullName;
+      Temail.innerText = "Email: " + user.email;
+      avatar.src = user.avatar;
+
+      fieldUsername.value = user.username;
+      fieldFullName.value = user.fullName;
+      fieldEmail.value = user.email;
+
+      
+      
+      const responsePosts=await fetch(`https://symmetrical-space-yodel-557vrj6v9r7fv49x-5000.app.github.dev/api/v1/users/getPosts?username=${user.username}`,{
+      method:'GET',
+      credentials:'include',
+       
+   
+    })
+    
+    const result=await responsePosts.json()
+    console.log(result)
+    reviews.innerText=result.data[0].postCount
+
+
+    } else {
+      alert("Error fetching profile");
+    }
+  } catch (err) {
+    console.error("Error fetching profile", err);
+  }
+
+  // --- Update Profile Info ---
+  document.getElementById("updateProfileForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const profile = {
+      fullName: fieldFullName.value,
+      email: fieldEmail.value
+    };
+
+    try {
+      const res = await fetch("https://symmetrical-space-yodel-557vrj6v9r7fv49x-5000.app.github.dev/api/v1/users/updateProfile", {
+        method: "PATCH",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(profile)
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Could not update profile");
+
+      
+      TfullName.innerText = data.data.fullName;
+      Temail.innerText = "Email: " + data.data.email;
+      fieldFullName.value = data.data.fullName;
+      fieldEmail.value = data.data.email;
+
+      alert("Profile updated successfully!");
+    } catch (err) {
+      console.error(err);
+      alert(err.message);
+    }
+  });
+
+  // Update Avatar 
+  const uploadPhoto = document.getElementById("uploadPhoto");
+  uploadPhoto.addEventListener("change", async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("avatar", file);
+
+    try {
+      const res = await fetch("https://symmetrical-space-yodel-557vrj6v9r7fv49x-5000.app.github.dev/api/v1/users/updateAvatar", {
+        method: "PATCH",
+        credentials: "include",
+        body: formData
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Could not update avatar");
+
+      avatar.src = data.data.avatar; 
+      alert("Avatar updated successfully!");
+    } catch (err) {
+      console.error(err);
+      alert(err.message);
+    }
+  });
+
+  // Change Password
+  document.getElementById("changePasswordForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const currentPassword = document.getElementById("currentPassword").value;
+    const newPassword = document.getElementById("newPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+
+    if (newPassword !== confirmPassword) return alert("Passwords do not match");
+
+    try {
+      const res = await fetch("https://symmetrical-space-yodel-557vrj6v9r7fv49x-5000.app.github.dev/api/v1/users/updatePassword", {
+        method: "PATCH",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ currentPassword, newPassword })
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Could not update password");
+
+      alert("Password updated successfully!");
+      document.getElementById("changePasswordForm").reset();
+    } catch (err) {
+      console.error(err);
+      alert(err.message);
+    }
+  });
+});
+</script>
+
 
       <!-- Change Password Section -->
       <div class="mt-10 border-t pt-6">
@@ -318,13 +420,13 @@
     <!-- JS: Preview uploaded image -->
     <script>
       const uploadPhoto = document.getElementById("uploadPhoto");
-      const profilePhoto = document.getElementById("profilePhoto");
+      const avatar = document.getElementById("avatar");
 
       uploadPhoto.addEventListener("change", (e) => {
         const file = e.target.files[0];
         if (file) {
           const reader = new FileReader();
-          reader.onload = (e) => (profilePhoto.src = e.target.result);
+          reader.onload = (e) => (avatar.src = e.target.result);
           reader.readAsDataURL(file);
         }
       });

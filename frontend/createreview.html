@@ -127,7 +127,7 @@
           Create a New Review
         </h1>
 
-        <form id="createReviewForm" class="space-y-5">
+        <form id="createReviewForm" class="space-y-5" >
           <!-- Movie Title -->
           <div>
             <label for="title" class="block text-gray-700 font-medium mb-2"
@@ -190,7 +190,7 @@
             <input
               type="file"
               id="movieImage"
-              name="movieImage"
+              name="image"
               accept="image/*"
               class="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-400"
             />
@@ -209,6 +209,36 @@
       </div>
     </section>
 
+
+    <script>
+    const form =document.getElementById('createReviewForm')
+
+
+
+    form.addEventListener('submit',async (e)=>{
+      e.preventDefault()
+          const formData=new FormData(form)
+
+      try {
+        const res=await fetch('https://symmetrical-space-yodel-557vrj6v9r7fv49x-5000.app.github.dev/api/v1/post/createPost',{
+          method:'POST',
+          credentials:'include',
+          body:formData
+        })
+
+        const data=await res.json()
+        if(res.ok){
+          alert('Successfully posted')
+          window.location.href='/myreview.html'
+        }
+        else{
+          alert('Couldnt post due to '+ data.message)
+        }
+      } catch (error) {
+        console.log('Couldnt post ',error)
+      }
+    })
+    </script>
     <!-- JS for Star Rating -->
     <script>
       const stars = document.querySelectorAll("#rating span");
