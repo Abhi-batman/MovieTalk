@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Reviews</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-gray-100">
+    <!-- Logged-in Navbar -->
+    <nav
+      id="loggedInNavbar"
+      class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md shadow-md transition-all duration-300"
+    >
+      <div
+        class="max-w-7xl mx-auto flex justify-between items-center px-4 py-2"
+      >
+        <a href="#" class="flex items-center space-x-2">
+          <img
+            src="https://assets.aceternity.com/logo-dark.png"
+            alt="logo"
+            class="w-8 h-8"
+          />
+          <span class="font-bold text-black">MovieTalk</span>
+        </a>
+
+        <!-- Desktop Menu -->
+        <div class="hidden lg:flex items-center space-x-4">
+          <a href="/" class="px-3 py-2 rounded hover:bg-gray-200">Home</a>
+          <a href="/myreview.html" class="px-3 py-2 rounded hover:bg-gray-200"
+            >My Reviews</a
+          >
+
+          <!-- Profile Photo -->
+          <div class="relative">
+            <button
+              id="profileButton"
+              class="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-300 focus:outline-none"
+            >
+              <img
+                src="https://i.pravatar.cc/100?img=12"
+                alt="Profile"
+                class="w-full h-full object-cover"
+              />
+            </button>
+
+            <!-- Dropdown Menu -->
+            <div
+              id="profileDropdown"
+              class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg"
+            >
+              <a
+                href="/profile.html"
+                class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                >Profile</a
+              >
+              <hr class="border-gray-200" />
+              <a
+                href="/logout"
+                class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                >Logout</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button
+          id="loggedInMobileMenuButton"
+          class="lg:hidden px-3 py-2 rounded bg-gray-200"
+        >
+          ☰
+        </button>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div
+        id="loggedInMobileMenu"
+        class="hidden flex-col px-4 py-2 space-y-2 bg-white shadow-md lg:hidden"
+      >
+        <a href="/" class="px-3 py-2 rounded hover:bg-gray-200">Home</a>
+        <a href="/myreview.html" class="px-3 py-2 rounded hover:bg-gray-200"
+          >My Reviews</a
+        >
+        <div
+          class="flex items-center space-x-2 px-3 py-2 border-t border-gray-200 mt-2"
+        >
+          <img
+            src="https://i.pravatar.cc/100?img=12"
+            alt="Profile"
+            class="w-10 h-10 rounded-full object-cover"
+          />
+          <span class="text-gray-700 font-semibold">John Doe</span>
+        </div>
+        <a href="/profile.html" class="px-3 py-2 rounded hover:bg-gray-200"
+          >Profile</a
+        >
+        <a href="/logout" class="px-3 py-2 rounded hover:bg-gray-200">Logout</a>
+      </div>
+    </nav>
+
+    <script>
+      // Mobile menu toggle
+      const button = document.getElementById("loggedInMobileMenuButton");
+      const menu = document.getElementById("loggedInMobileMenu");
+      button.addEventListener("click", () => {
+        menu.classList.toggle("hidden");
+      });
+
+      // Profile dropdown toggle
+      const profileButton = document.getElementById("profileButton");
+      const profileDropdown = document.getElementById("profileDropdown");
+      profileButton.addEventListener("click", () => {
+        profileDropdown.classList.toggle("hidden");
+      });
+
+      // Close dropdown if clicked outside
+      document.addEventListener("click", (e) => {
+        if (
+          !profileButton.contains(e.target) &&
+          !profileDropdown.contains(e.target)
+        ) {
+          profileDropdown.classList.add("hidden");
+        }
+      });
+    </script>
+
+    <!-- Profile Section -->
+    <section
+      class="bg-white shadow-md rounded-lg max-w-3xl mx-auto mt-10 p-6 flex flex-col items-center"
+    >
+      <img
+        src="https://images.unsplash.com/photo-1603415526960-f7e0328a23b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&h=120&q=80"
+        alt="User Profile"
+        class="w-28 h-28 rounded-full border-4 border-indigo-500 mb-4 object-cover"
+      />
+      <h1 class="text-2xl font-semibold">John Doe</h1>
+      <p class="text-gray-500">@johndoe</p>
+      <p class="mt-2 text-gray-700">
+        Total Reviews: <span class="font-semibold">12</span>
+      </p>
+
+      <!-- Create Review Button -->
+      <a
+        href="/createreview.html"
+        class="mt-4 px-6 py-2 bg-indigo-500 text-white font-semibold rounded-lg hover:bg-indigo-600 transition"
+      >
+        + Create Review
+      </a>
+    </section>
+
+    <!-- Reviews Section -->
+    <section class="max-w-3xl mx-auto mt-8 space-y-6">
+      <!-- Single Review Card -->
+      <div class="bg-white shadow-md rounded-lg overflow-hidden">
+        <img
+          src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=200&q=80"
+          alt="Movie Image"
+          class="w-full h-48 object-cover"
+        />
+        <div class="p-4">
+          <h2 class="text-xl font-semibold mb-2">Inception</h2>
+          <p class="text-gray-700 mb-3">
+            Mind-blowing plot with stunning visuals. A must-watch for sci-fi
+            lovers!
+          </p>
+          <div class="flex items-center">
+            <span class="text-yellow-500 font-semibold">★ 4.8</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Another Review Card -->
+      <div class="bg-white shadow-md rounded-lg overflow-hidden">
+        <img
+          src="https://images.unsplash.com/photo-1600527962062-5b92c0ec6e58?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=200&q=80"
+          alt="Movie Image"
+          class="w-full h-48 object-cover"
+        />
+        <div class="p-4">
+          <h2 class="text-xl font-semibold mb-2">The Dark Knight</h2>
+          <p class="text-gray-700 mb-3">
+            Epic performances, intense action, and an unforgettable Joker!
+          </p>
+          <div class="flex items-center">
+            <span class="text-yellow-500 font-semibold">★ 5.0</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

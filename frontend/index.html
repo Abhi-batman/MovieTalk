@@ -31,6 +31,38 @@
     <!-- Your custom CSS -->
     <link rel="stylesheet" href="./src/styles.css">
 </head>
+<button id="createReviewBtn"
+    class="fixed bottom-6 right-6 bg-indigo-600 text-white px-5 py-3 rounded-full shadow-lg hover:bg-indigo-700 transition flex items-center space-x-2">
+    <span class="text-lg font-semibold">+ Create Review</span>
+</button>
+
+<script>
+  document.getElementById('createReviewBtn').addEventListener('click',async ()=>{
+
+    try {
+      const res=await fetch('http://localhost:5000/api/v1/users/getProfile',{
+              method:'GET',
+            credentials:'include'})
+
+                if (!response.ok) throw new Error("Couldn't log in ");
+
+            const data = await response.json();
+            const user = result.data;
+
+            if (user) {
+          
+                window.location.href = "/createreview.html";
+            } else {
+               
+                window.location.href = "/signup.html";
+            }
+    } catch (error) {
+       window.location.href = "/signup.html";
+    }
+  })
+
+
+</script>
 
 <body class="bg-gray-100 font-sans">
 
@@ -44,7 +76,7 @@
                 </a>
                 <div class="hidden lg:flex space-x-4">
                     <a href="/" class="px-3 py-2 rounded hover:bg-gray-200">Home</a>
-                    <a href="/reviews" class="px-3 py-2 rounded hover:bg-gray-200">My Reviews</a>
+                    <a href="/myreview.html" class="px-3 py-2 rounded hover:bg-gray-200">My Reviews</a>
                    <a href="/signup.html"> <button class="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">Login / Signup</button>
                 </div></a>
                 <button id="mobileMenuButton" class="lg:hidden px-3 py-2 rounded bg-gray-200">☰</button>
@@ -53,7 +85,7 @@
            <!-- Mobile Menu -->
              <div id="mobileMenu" class="hidden flex-col px-4 py-2 space-y-2 bg-white shadow-md lg:hidden">
                 <a href="/" class="px-3 py-2 rounded hover:bg-gray-200">Home</a>
-                <a href="/reviews" class="px-3 py-2 rounded hover:bg-gray-200">My Reviews</a>
+                <a href="/myreview" class="px-3 py-2 rounded hover:bg-gray-200">My Reviews</a>
                <a href="signup.html"> <button  class="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 w-full text-left">Login /
                     Signup</button></a>
             </div>
@@ -307,6 +339,7 @@ try {
 
 })
          
+//MYREVIEW CHECK
 
            
            </script> 

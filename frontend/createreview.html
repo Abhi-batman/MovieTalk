@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Review</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-gray-100">
+    <!-- Logged-in Navbar -->
+    <nav
+      id="loggedInNavbar"
+      class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md shadow-md transition-all duration-300"
+    >
+      <div
+        class="max-w-7xl mx-auto flex justify-between items-center px-4 py-2"
+      >
+        <a href="/" class="flex items-center space-x-2">
+          <img
+            src="https://assets.aceternity.com/logo-dark.png"
+            alt="logo"
+            class="w-8 h-8"
+          />
+          <span class="font-bold text-black">MovieTalk</span>
+        </a>
+
+        <!-- Desktop Menu -->
+        <div class="hidden lg:flex items-center space-x-4">
+          <a href="/" class="px-3 py-2 rounded hover:bg-gray-200">Home</a>
+          <a href="/myreview.html" class="px-3 py-2 rounded hover:bg-gray-200"
+            >My Reviews</a
+          >
+
+          <!-- Profile Photo -->
+          <div class="relative">
+            <button
+              id="profileButton"
+              class="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-300 focus:outline-none"
+            >
+              <img
+                src="https://i.pravatar.cc/100?img=12"
+                alt="Profile"
+                class="w-full h-full object-cover"
+              />
+            </button>
+
+            <!-- Dropdown Menu -->
+            <div
+              id="profileDropdown"
+              class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg"
+            >
+              <a
+                href="/profile.html"
+                class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                >Profile</a
+              >
+              <hr class="border-gray-200" />
+              <a
+                href="/logout"
+                class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                >Logout</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button
+          id="loggedInMobileMenuButton"
+          class="lg:hidden px-3 py-2 rounded bg-gray-200"
+        >
+          ☰
+        </button>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div
+        id="loggedInMobileMenu"
+        class="hidden flex-col px-4 py-2 space-y-2 bg-white shadow-md lg:hidden"
+      >
+        <a href="/" class="px-3 py-2 rounded hover:bg-gray-200">Home</a>
+        <a href="/myreview.html" class="px-3 py-2 rounded hover:bg-gray-200"
+          >My Reviews</a
+        >
+        <div
+          class="flex items-center space-x-2 px-3 py-2 border-t border-gray-200 mt-2"
+        >
+          <img
+            src="https://i.pravatar.cc/100?img=12"
+            alt="Profile"
+            class="w-10 h-10 rounded-full object-cover"
+          />
+          <span class="text-gray-700 font-semibold">John Doe</span>
+        </div>
+        <a href="/logout" class="px-3 py-2 rounded hover:bg-gray-200">Logout</a>
+      </div>
+    </nav>
+
+    <!-- JS for Navbar -->
+    <script>
+      const button = document.getElementById("loggedInMobileMenuButton");
+      const menu = document.getElementById("loggedInMobileMenu");
+      button.addEventListener("click", () => menu.classList.toggle("hidden"));
+
+      const profileButton = document.getElementById("profileButton");
+      const profileDropdown = document.getElementById("profileDropdown");
+      profileButton.addEventListener("click", () =>
+        profileDropdown.classList.toggle("hidden")
+      );
+      document.addEventListener("click", (e) => {
+        if (
+          !profileButton.contains(e.target) &&
+          !profileDropdown.contains(e.target)
+        ) {
+          profileDropdown.classList.add("hidden");
+        }
+      });
+    </script>
+
+    <!-- Create Review Form -->
+    <section
+      class="flex justify-center items-center px-4 py-16 min-h-[calc(100vh-120px)]"
+    >
+      <div class="w-full max-w-2xl bg-white rounded-lg shadow-md p-8">
+        <h1 class="text-2xl font-semibold mb-6 text-center">
+          Create a New Review
+        </h1>
+
+        <form id="createReviewForm" class="space-y-5">
+          <!-- Movie Title -->
+          <div>
+            <label for="title" class="block text-gray-700 font-medium mb-2"
+              >Movie Title</label
+            >
+            <input
+              type="text"
+              id="title"
+              name="title"
+              placeholder="Enter movie title"
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              required
+            />
+          </div>
+
+          <!-- Movie Review -->
+          <div>
+            <label
+              for="description"
+              class="block text-gray-700 font-medium mb-2"
+              >Your Review</label
+            >
+            <textarea
+              id="description"
+              name="description"
+              rows="5"
+              placeholder="Write your thoughts about the movie..."
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              required
+            ></textarea>
+          </div>
+
+          <!-- Star Rating -->
+          <div>
+            <label class="block text-gray-700 font-medium mb-2">Rating</label>
+            <div
+              id="rating"
+              class="flex justify-center space-x-2 text-3xl text-gray-400 cursor-pointer"
+            >
+              <span data-value="1">★</span>
+              <span data-value="2">★</span>
+              <span data-value="3">★</span>
+              <span data-value="4">★</span>
+              <span data-value="5">★</span>
+            </div>
+            <input
+              type="hidden"
+              name="rating"
+              id="ratingValue"
+              value="0"
+              required
+            />
+          </div>
+
+          <!-- Upload Image -->
+          <div>
+            <label for="movieImage" class="block text-gray-700 font-medium mb-2"
+              >Upload Movie Image (optional)</label
+            >
+            <input
+              type="file"
+              id="movieImage"
+              name="movieImage"
+              accept="image/*"
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            />
+          </div>
+
+          <!-- Submit -->
+          <div class="text-center">
+            <button
+              type="submit"
+              class="px-6 py-2 bg-indigo-500 text-white font-semibold rounded-lg hover:bg-indigo-600 transition"
+            >
+              Submit Review
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- JS for Star Rating -->
+    <script>
+      const stars = document.querySelectorAll("#rating span");
+      const ratingValue = document.getElementById("ratingValue");
+      stars.forEach((star) => {
+        star.addEventListener("click", () => {
+          const value = star.getAttribute("data-value");
+          ratingValue.value = value;
+          stars.forEach((s) => s.classList.remove("text-yellow-400"));
+          for (let i = 0; i < value; i++)
+            stars[i].classList.add("text-yellow-400");
+        });
+      });
+    </script>
+  </body>
+</html>
