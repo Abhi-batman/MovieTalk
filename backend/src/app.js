@@ -18,9 +18,10 @@ app.get("/", (req, res) => {
 });
 
 
+
 app.use(
   cors({
-    origin: "*",
+    origin: "http://localhost:5000",
     credentials: true,
   })
 );
