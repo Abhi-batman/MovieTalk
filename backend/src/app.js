@@ -21,7 +21,7 @@ app.get("/", (req, res) => {
 
 app.use(
   cors({
-    origin: "http://localhost:5000",
+    origin: "*",
     credentials: true,
   })
 );
