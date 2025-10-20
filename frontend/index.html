@@ -44,12 +44,12 @@
               method:'GET',
             credentials:'include'})
 
-                if (!response.ok) throw new Error("Couldn't log in ");
+                if (!res.ok) throw new Error("Couldn't log in ");
 
             const data = await res.json();
-            const user = data.data;
+           
 
-            if (user) {
+            if (res.ok && data.data) {
           
                 window.location.href = "/createreview.html";
             } else {
@@ -196,8 +196,8 @@
               guestNavbar.classList.add('hidden')
               userNavbar.classList.remove('hidden')
 
-              if(data?.data?.avatar?.url){
-                avatar.src=data?.data?.avatar?.url;
+              if(data?.data?.avatar){
+                avatar.src=data?.data?.avatar;
               }
               
 
@@ -371,50 +371,7 @@ try {
   
 <div id="cardsContainer">
 <!-- 2nd -->
-   <div class="max-w-md w-full bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200 mx-auto my-6">
-  <!-- Header -->
-  <div class="flex items-center justify-between p-4">
-    <div class="flex items-center space-x-3">
-      <img
-        src="https://i.pravatar.cc/100?img=8"
-        alt="Profile"
-        class="w-10 h-10 rounded-full object-cover"
-      />
-      <div>
-        <h3 class="text-sm font-semibold text-gray-800">Aarav Patel</h3>
-        <p class="text-xs text-gray-500">@aaravp</p>
-      </div>
-    </div>
-    <p class="text-xs text-gray-500">2h ago</p>
-  </div>
-
-  <!-- Post Image -->
-  <div>
-    <img
-      src="https://images.unsplash.com/photo-1606112219348-204d7d8b94ee"
-      alt="Post"
-      class="w-full h-64 object-cover"
-    />
-  </div>
-
-  <!-- Post Content -->
-  <div class="p-4">
-    <h2 class="text-lg font-bold text-gray-800 mb-2">Inception (2010)</h2>
-
-    <!-- Rating -->
-    <div class="flex items-center mb-3">
-      <!-- 4 out of 5 stars example -->
-      <div class="flex text-yellow-400 text-lg">
-        ★★★★☆
-      </div>
-      <span class="text-sm text-gray-600 ml-2">4.0 / 5</span>
-    </div>
-
-    <p class="text-sm text-gray-600">
-      A thrilling sci-fi movie that explores dreams within dreams. Must watch!
-    </p>
-  </div>
-</div>
+   
 
 
 <div id="loader" class="text-center text-gray-600 my-4 hidden">Loading more movies...</div>
