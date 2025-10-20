@@ -225,7 +225,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
  
   try {
-    const res = await fetch("https://symmetrical-space-yodel-557vrj6v9r7fv49x-5000.app.github.dev/api/v1/users/getProfile", {
+    const res = await fetch("https://fuzzy-goggles-g6vxrj9xwpg3v97j-5000.app.github.dev/api/v1/users/getProfile", {
       method: "GET",
       credentials: "include"
     });
@@ -246,7 +246,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       
       
-      const responsePosts=await fetch(`https://symmetrical-space-yodel-557vrj6v9r7fv49x-5000.app.github.dev/api/v1/users/getPosts?username=${user.username}`,{
+      const responsePosts=await fetch(`https://fuzzy-goggles-g6vxrj9xwpg3v97j-5000.app.github.dev/api/v1/users/getPosts?username=${user.username}`,{
       method:'GET',
       credentials:'include',
        
@@ -275,7 +275,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
 
     try {
-      const res = await fetch("https://symmetrical-space-yodel-557vrj6v9r7fv49x-5000.app.github.dev/api/v1/users/updateProfile", {
+      const res = await fetch("https://fuzzy-goggles-g6vxrj9xwpg3v97j-5000.app.github.dev/api/v1/users/updateProfile", {
         method: "PATCH",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -308,7 +308,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     formData.append("avatar", file);
 
     try {
-      const res = await fetch("https://symmetrical-space-yodel-557vrj6v9r7fv49x-5000.app.github.dev/api/v1/users/updateAvatar", {
+      const res = await fetch("https://fuzzy-goggles-g6vxrj9xwpg3v97j-5000.app.github.dev/api/v1/users/updateAvatar", {
         method: "PATCH",
         credentials: "include",
         body: formData
