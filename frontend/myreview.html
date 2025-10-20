@@ -38,7 +38,7 @@
               id="profileButton"
               class="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-300 focus:outline-none"
             >
-              <img
+              <img id="avatar"
                 src="https://i.pravatar.cc/100?img=12"
                 alt="Profile"
                 class="w-full h-full object-cover"
@@ -155,55 +155,6 @@
       <!-- Single Review Card -->
      
 
-<script>
-  // Get all review cards
-  document.querySelectorAll("[id^='review-']").forEach((reviewCard) => {
-    const id = reviewCard.id.split("-")[1]; // e.g., "1" from "review-1"
-
-    const updateBtn = document.getElementById(`update-btn-${id}`);
-    const deleteBtn = document.getElementById(`delete-btn-${id}`);
-    const reviewText = document.getElementById(`review-text-${id}`);
-    const editBox = document.getElementById(`edit-box-${id}`);
-    const submitUpdate = document.getElementById(`submit-update-${id}`);
-
-    // --- Update button ---
-    updateBtn.addEventListener("click", () => {
-      // Fill textarea with current text
-      editBox.value = reviewText.innerText.trim();
-
-      // Toggle visibility
-      reviewText.classList.add("hidden");
-      editBox.classList.remove("hidden");
-      submitUpdate.classList.remove("hidden");
-    });
-
-    // --- Submit Update button ---
-    submitUpdate.addEventListener("click", () => {
-      const updatedText = editBox.value.trim();
-
-      if (!updatedText) {
-        alert("Description cannot be empty!");
-        return;
-      }
-
-      // Update UI
-      reviewText.innerText = updatedText;
-      reviewText.classList.remove("hidden");
-      editBox.classList.add("hidden");
-      submitUpdate.classList.add("hidden");
-
-      alert("Review updated (UI only).");
-    });
-
-    // --- Delete button ---
-    deleteBtn.addEventListener("click", () => {
-      if (confirm("Are you sure you want to delete this review?")) {
-        reviewCard.remove();
-        alert("Review deleted (UI only).");
-      }
-    });
-  });
-</script>
 
       
     
@@ -233,7 +184,7 @@ const cards=document.getElementById('cards')
       headUsername.innerText = "@" + user.username;
       headfullName.innerText = user.fullName;
       
-      avatar.src = user.avatar;
+      headAvatar.src = user.avatar;
 
 
     
