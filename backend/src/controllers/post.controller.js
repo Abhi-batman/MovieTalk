@@ -115,6 +115,7 @@ const getAllPosts = asyncHandler(async (req, res) => {
         description: 1,
         createdAt: 1,
         image:1,
+        rating:1,
         "user.username": 1,
         "user.avatar": 1,
         "user.fullName":1

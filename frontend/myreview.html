@@ -130,7 +130,7 @@
     <section
       class="bg-white shadow-md rounded-lg max-w-3xl mx-auto mt-10 p-6 flex flex-col items-center"
     >
-      <img id='avatar'
+      <img id='headAvatar'
         src="https://images.unsplash.com/photo-1603415526960-f7e0328a23b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&h=120&q=80"
         alt="User Profile"
         class="w-28 h-28 rounded-full border-4 border-indigo-500 mb-4 object-cover"
@@ -162,9 +162,56 @@
     </section>
 
 <script>
+document.addEventListener('DOMContentLoaded',async ()=>{
+
+          
+
+           const avatar=document.getElementById('avatar')
+
+           try {
+            const response=await fetch('https://fuzzy-goggles-g6vxrj9xwpg3v97j-5000.app.github.dev/api/v1/users/getProfile',{
+              method:'GET',
+              credentials: "include"
+            })
+
+            const data=await response.json()
+
+            if(response.ok){
+              
+              if(data?.data?.avatar){
+                avatar.src=data?.data?.avatar;
+              }
+              
+
+
+
+              
+
+              
+
+
+
+            }else{
+               console.log('Couldnt fetch avatar')
+            }
+
+           } catch (error) {
+             console.error('Error fetching profile:', error);
+  
+            
+           }
+
+          })
+
+
+
+
+
+
+//profile
   const headUsername=document.getElementById('headUsername')
   const headfullName=document.getElementById('headfullName')
-  const headAvatar=document.getElementById('avatar')
+  const headAvatar=document.getElementById('headAvatar')
   const totalReviews=document.getElementById('totalReviews')
 const cards=document.getElementById('cards')
   document.addEventListener('DOMContentLoaded',async()=>{
@@ -174,6 +221,7 @@ const cards=document.getElementById('cards')
       credentials: "include"
     });
     const data = await res.json();
+    const user=data.data
     console.log('getprofile ', data)
    
 

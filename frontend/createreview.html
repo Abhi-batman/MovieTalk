@@ -17,7 +17,7 @@
         class="max-w-7xl mx-auto flex justify-between items-center px-4 py-2"
       >
         <a href="/" class="flex items-center space-x-2">
-          <img
+          <img 
             src="https://assets.aceternity.com/logo-dark.png"
             alt="logo"
             class="w-8 h-8"
@@ -211,6 +211,49 @@
 
 
     <script>
+document.addEventListener('DOMContentLoaded',async ()=>{
+
+          
+
+           const avatar=document.getElementById('avatar')
+
+           try {
+            const response=await fetch('https://fuzzy-goggles-g6vxrj9xwpg3v97j-5000.app.github.dev/api/v1/users/getProfile',{
+              method:'GET',
+              credentials: "include"
+            })
+
+            const data=await response.json()
+
+            if(response.ok){
+              
+              if(data?.data?.avatar){
+                avatar.src=data?.data?.avatar;
+              }
+              
+
+
+
+              
+
+              
+
+
+
+            }else{
+               console.log('Couldnt fetch avatar')
+            }
+
+           } catch (error) {
+             console.error('Error fetching profile:', error);
+  
+            
+           }
+
+          })
+
+
+      //Review form
     const form =document.getElementById('createReviewForm')
  
 
